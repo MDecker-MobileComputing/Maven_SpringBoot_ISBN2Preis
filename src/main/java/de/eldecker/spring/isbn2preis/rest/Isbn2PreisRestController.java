@@ -3,8 +3,11 @@ package de.eldecker.spring.isbn2preis.rest;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
 
+import java.util.regex.Pattern;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class Isbn2PreisRestController {
 	
 	private static Logger LOG = LoggerFactory.getLogger( Isbn2PreisRestController.class );
-	
+		
+	/** Regex-Pattern für ISBN-13: genau 13 Ziffern */
+	private static final Pattern ISBN13_PATTERN = Pattern.compile( "^\\d{13}$" );
 
     
 	/**
@@ -38,16 +43,17 @@ public class Isbn2PreisRestController {
 	 *             Beispiel für ISBN13: {@code 9783446481220} 
 	 * 
 	 * @return Preis in Euro; wird aus Hash-Code der von Bindestrichen 
-	 *         bereinigen ISBN berechnet; wenn ISBN eine ungültige
-	 *         Länge hat, dann wird {@code -1.0} zurückgegeben.
+	 *         bereinigen ISBN berechnet; wenn ISBN eine ungültiges
+	 *         Format hat, dann wird {@code -1.0} zurückgegeben.
 	 */
 	@GetMapping( "/isbn2preis" )
 	public ResponseEntity<Double> getPreis( String isbn ) {
 		
 		isbn = isbn.trim();		
 		
-		final int laenge = isbn.length();						
-		if ( laenge == 13 ) {
+		boolean istGueltig = ISBN13_PATTERN.matcher( isbn ).matches();
+		
+		if ( istGueltig ) {
 
 			final int    hashCodeQuadrat = Math.abs( isbn.hashCode() * isbn.hashCode() );
 			final int    preisInEuroCent = hashCodeQuadrat % 10_000;
@@ -59,7 +65,7 @@ public class Isbn2PreisRestController {
 						
 		} else {
 			
-			LOG.warn( "ISBN={} hat unerlaubte Laenge: {}", isbn, laenge );			
+			LOG.warn( "ISBN={} hat unerlaubtes Format.", isbn );			
 			return ResponseEntity.status( BAD_REQUEST ).body( -1.0 );
 		}				
 	}
