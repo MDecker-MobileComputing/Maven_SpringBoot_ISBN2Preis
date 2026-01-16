@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * RestController-Klasse mit REST-Endpunkt für Abfrage von Preis
- * von Buch anhand ISBN-13.
+ * von Buch anhand ISBN.
  */
 @RestController
 @RequestMapping( "/api/v1" )
@@ -26,36 +26,35 @@ public class Isbn2PreisRestController {
 
 	/**
 	 * Methode für HTTP-GET-REST-Endpunkt um Preis für ein Buch anhand der
-	 * ISBN13 abzufragen.
+	 * ISBN abzufragen.
 	 * <br><br>
 	 * 
-	 * Beispiel-URL für lokalen Aufruf an Port 8010 (Instanz 1): 
+	 * Beispiel-URL für lokalen Aufruf: 
 	 * <pre>
-	 * http://localhost:8010/api/v1/isbn2preis?isbn13=9783836290494
+	 * http://localhost:8080/api/v1/isbn2preis?isbn=9783836290494
 	 * </pre>
 	 * 
-	 * @param isbn13 ISBN13 für das Buch, dessen Preis abgefragt werden soll.
-	 *               Beispiel: {@code 9783446481220}
+	 * @param isbn ISBN für das Buch, dessen Preis abgefragt werden soll.
+	 *             Darf keine Bindestriche oder Leerzeichen enthalten:
+	 *             Beispiel: {@code 9783446481220}
 	 * 
 	 * @return Preis in Euro; wird aus Hash-Code der von Bindestrichen 
-	 *         bereinigen ISBN13 berechnet. Wenn eine Zahl übergeben wird,
-	 *         die nicht genau 13 Stellen hat, dann wird {@code -1}
-	 *         zurückgegeben.
+	 *         bereinigen ISBN berechnet. 
 	 */
 	@GetMapping( "/isbn2preis" )
-	public ResponseEntity<Double> getPreis( @RequestParam("isbn13") Long isbn13 ) {
+	public ResponseEntity<Double> getPreis( String isbn ) {
 		
-		if ( isbn13.toString().length() != 13 ) {
+		if ( isbn.toString().length() != 13 ) {
 		
-			LOG.error( "Aufruf mit ISBN={}, hat aber nicht genau 13 Stellen.", isbn13 );
+			LOG.error( "Aufruf mit ISBN={}, hat aber nicht genau 13 Stellen.", isbn );
 			return ResponseEntity.status( BAD_REQUEST ).body( NEGATIVE_INFINITY );
 		}
 				
-		final int    hashCodeQuadrat = Math.abs( isbn13.hashCode() * isbn13.hashCode() );
+		final int    hashCodeQuadrat = Math.abs( isbn.hashCode() * isbn.hashCode() );
 		final int    preisInEuroCent = hashCodeQuadrat % 10_000;
 		final double preisInEuro     = preisInEuroCent / 100.0;
 		
-		LOG.info( "Antwort für ISBN13={}: {} Euro", isbn13, preisInEuro );
+		LOG.info( "Antwort für ISBN={}: {} Euro", isbn, preisInEuro );
 		
 		return ResponseEntity.status( OK ).body( preisInEuro );
 	}

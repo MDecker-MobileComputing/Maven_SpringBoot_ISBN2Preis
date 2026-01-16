@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <title>REST-API für Preisabfrage von Büchern an ISBN13</title>
+    <title>REST-API für Preisabfrage von Büchern anhand ISBN</title>
     <meta charset="utf-8" >
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -24,26 +24,27 @@
 </head>
 <body>
 
-  <h1>REST-API für Preisabfrage von Büchern anhand ISBN13</h1>
+  <h1>REST-API für Preisabfrage von Büchern anhand ISBN</h1>
 
-  <h2>Gültige Aufrufe:</h2>
+  <h2>Gültige Aufrufe für ISBN13:</h2>
   <ul>
-    <li><a href="api/v1/isbn2preis?isbn13=9783836290494">Buch 1</a></li>
-    <li><a href="api/v1/isbn2preis?isbn13=9780060833275">Buch 2</a></li>
-    <li><a href="api/v1/isbn2preis?isbn13=9783836295444">Buch 3</a></li>
+    <li><a href="api/v1/isbn2preis?isbn=9783836290494">Buch 1</a></li>
+    <li><a href="api/v1/isbn2preis?isbn=9780060833275">Buch 2</a></li>
+    <li><a href="api/v1/isbn2preis?isbn=9783836295444">Buch 3</a></li>
+  </ul>
+
+  <h2>Gültige Aufrufe für ISBN10:</h2>
+  <ul>
+    <li><a href="api/v1/isbn2preis?isbn=3946330479">Buch 1</a></li>
+    <li><a href="api/v1/isbn2preis?isbn=3404193148">Buch 2</a></li>
+    <li><a href="api/v1/isbn2preis?isbn=379105953X">Buch 3</a></li>
   </ul>
   <p>
-    Die Preise werden durch Verhashung des normierten
-    <a href="https://de.wikipedia.org/wiki/Internationale_Standardbuchnummer#ISBN-13">ISBN13</a>-Strings
-    "bestimmt".
+    Die ISBN10 kann im Gegensatz zur ISBN13 außer Ziffern an letzter Stelle
+    (Prüfziffer) aus ein "X" enthalten.
   </p>
 
-  <h2>Unzulässige Aufrufe:</h2>
-  <ul>
-    <li><a href="api/v1/isbn2preis?isbn13=978383629049"   >ISBN13 zu kurz</a></li>
-    <li><a href="api/v1/isbn2preis?isbn13=97838362904933" >ISBN13 zu lang</a></li>
-    <li><a href="api/v1/isbn2preis?isbn13=978383629049a"  >ISBN13 enthält ungültiges Zeichen</a></li>
-  </ul>
+  <h2>Ungültige Aufrufe</h2>
   <p>
     Unzulässige Aufrufe liefern den HTTP-Status 400 (Bad Request) sowie "-Infinity"
     (negativ unendlich) als Preis.
