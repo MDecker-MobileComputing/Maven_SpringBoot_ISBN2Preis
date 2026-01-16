@@ -24,7 +24,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ISBN2Preis_FatJar
-        path: target/isbn2preis-*-SNAPSHOT.jar
+        path: target/isbn2preis_alone-*-SNAPSHOT.jar
         if-no-files-found: error
         retention-days: 3
 
