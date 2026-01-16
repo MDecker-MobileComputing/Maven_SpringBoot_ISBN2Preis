@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <title>REST-API für Preisabfrage von Büchern an ISBN13</title>
+    <meta charset="utf-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      <!--
+          body {
+              font-family: sans-serif;
+              padding    : 1em;
+          }
+          h2 {
+              margin-top: 2em;
+          }
+          a {
+              margin-bottom: 1em;
+          }
+          li {
+              margin-bottom: 1.5em;
+          }
+      -->
+      </style>
+</head>
+<body>
+
+  <h1>REST-API für Preisabfrage von Büchern anhand ISBN13</h1>
+
+  <h2>Gültige Aufrufe:</h2>
+  <ul>
+    <li><a href="api/v1/isbn2preis?isbn13=9783836290494">Buch 1</a></li>
+    <li><a href="api/v1/isbn2preis?isbn13=9780060833275">Buch 2</a></li>
+    <li><a href="api/v1/isbn2preis?isbn13=9783836295444">Buch 3</a></li>
+  </ul>
+  <p>
+    Die Preise werden durch Verhashung des normierten
+    <a href="https://de.wikipedia.org/wiki/Internationale_Standardbuchnummer#ISBN-13">ISBN13</a>-Strings
+    "bestimmt".
+  </p>
+
+  <h2>Unzulässige Aufrufe:</h2>
+  <ul>
+    <li><a href="api/v1/isbn2preis?isbn13=978383629049"   >ISBN13 zu kurz</a></li>
+    <li><a href="api/v1/isbn2preis?isbn13=97838362904933" >ISBN13 zu lang</a></li>
+    <li><a href="api/v1/isbn2preis?isbn13=978383629049a"  >ISBN13 enthält ungültiges Zeichen</a></li>
+  </ul>
+  <p>
+    Unzulässige Aufrufe liefern den HTTP-Status 400 (Bad Request) sowie "-Infinity"
+    (negativ unendlich) als Preis.
+  </p>
+
+</body>
