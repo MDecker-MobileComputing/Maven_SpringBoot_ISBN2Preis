@@ -41,7 +41,8 @@ public class Isbn2PreisRestController {
 	 *             Beispiel für ISBN13: {@code 9783446481220} 
 	 * 
 	 * @return Preis in Euro; wird aus Hash-Code der von Bindestrichen 
-	 *         bereinigen ISBN berechnet. 
+	 *         bereinigen ISBN berechnet; wenn ISBN eine ungültige
+	 *         Länge hat, dann wird {@code -1.0} zurückgegeben.
 	 */
 	@GetMapping( "/isbn2preis" )
 	public ResponseEntity<Double> getPreis( String isbn ) {
@@ -61,8 +62,7 @@ public class Isbn2PreisRestController {
 						
 		} else {
 			
-			LOG.warn( "Ungültige Länge der ISBN={}.", isbn );
-			
+			LOG.warn( "ISBN={} hat unerlaubte Laenge: {}", isbn, laenge );			
 			return ResponseEntity.status( BAD_REQUEST ).body( -1.0 );
 		}				
 	}
