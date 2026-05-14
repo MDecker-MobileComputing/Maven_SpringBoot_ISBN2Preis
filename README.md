@@ -2,7 +2,7 @@
 
 <br>
 
-Diese Repository enthält eine mit *Spring Boot* entwickelte Anwendung, die einen
+Dieses Repository enthält eine mit *Spring Boot* entwickelte Anwendung, die einen
 REST-Endpunkt bereitstellt, der für eine übergebene ISBN13 (International Standard
 Book Number) einen zufällig aber stabilen Preis zurückgibt.
 
